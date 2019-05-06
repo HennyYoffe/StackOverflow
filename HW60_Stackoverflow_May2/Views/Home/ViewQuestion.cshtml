@@ -1,0 +1,66 @@
+﻿@using HW60_Stackoverflow_May2
+@using ClassLibrary1
+@model ViewQuestionViewModel
+@*@{
+        ViewData["Title"] = "ViewQuestion";
+    }*@
+
+
+<div class="row">
+ 
+        <div class="col-md-6 col-md-offset-3 ">
+            <div class="well">
+            <h2>
+                @Model.Question.Title
+            </h2>
+            <div class="pull-right">
+                @if (Model.CanLikeQuestion)
+                {
+                    <a href="/home/likequestion?questionid=@Model.Question.Id">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </a>
+                }
+                <h4>Likes: @Model.Likes</h4>
+            </div>
+            <textarea class="form-control" rows="10" name="text">@Model.Question.Text</textarea>  
+        </div>      
+        <div class="pull-left" >
+            @foreach (Tag t in Model.Tags)
+            {
+                <span class="badge badge-primary">@t.Name</span>
+            }
+            </div>
+            <br />
+            @foreach (Answer a in Model.Answers)
+            {
+                <div class=" well">
+                    <p>@a.Text</p>
+                    <h4>@Model.User.Name</h4>
+
+                </div>
+            }
+            <br />
+            @if (Model.User != null)
+            {
+                <h4>Answer the question</h4>
+                <div class=" well">
+                    <form method="post" action="/home/submitanswer">
+                        <textarea name="text" cols="50" rows="5"></textarea>
+                        <input type="hidden" name="questionid" value="@Model.Question.Id" />
+                        <input type="hidden" name="userid" value="@Model.User.Id" />
+                        <button class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            }
+
+        </div>
+</div>
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+    <script>
+        $(() => {
+            $("#tags").tagsinput();
+        })
+    </script>
+}
